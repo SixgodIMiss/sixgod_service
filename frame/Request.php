@@ -23,7 +23,6 @@ class Request
 
     public function __construct()
     {
-        $this->request = $this;
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->client_ip = $this->get_client_ip();
         $this->schema = $_SERVER['REQUEST_SCHEME'];
@@ -37,11 +36,34 @@ class Request
         $this->cookie = $_COOKIE;
         $this->header = $this->getHeaders();
         $this->file = $_FILES;
+
+        $this->request = [
+            'method' => $this->method,
+            'client_ip' => $this->client_ip,
+            'schema' => $this->schema,
+            'domain' => $this->domain,
+            'pathinfo' => $this->pathinfo,
+            'path' => $this->path,
+            'url' => $this->url,
+            'module' => $this->module,
+            'controller' => $this->controller,
+            'action' => $this->action,
+            'url' => $this->url,
+            'params' => $this->params,
+            'session' => $this->session,
+            'cookie' => $this->cookie,
+            'header' => $this->header,
+            'cookie' => $this->cookie,
+            'file' => $this->file,
+        ];
     }
 
-    public function get()
+    /**
+     * 获取request参数
+     */
+    public function get($attribute)
     {
-        return $_SERVER;
+        return arr_get($this->request, $attribute, false);
     }
 
     /**
@@ -71,6 +93,9 @@ class Request
         return file_get_contents('php://input');
     }
 
+    /**
+     * HTTP头属性
+     */
     protected function getHeaders()
     {
         return [

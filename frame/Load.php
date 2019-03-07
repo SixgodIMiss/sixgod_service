@@ -26,7 +26,7 @@ require_once __DIR__ .'/Helper.php';
 require_once __DIR__ .'/Request.php';
 
 $request = new Request();
-var_dump($request->get());
+// var_dump($request->get('domain'));
 
 /**
  * app load
