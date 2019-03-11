@@ -61,9 +61,9 @@ class Request
     /**
      * 获取request参数
      */
-    public function get($attribute)
+    public function get($attribute, $default = false)
     {
-        return arr_get($this->request, $attribute, false);
+        return Helper::arr_get($this->request, $attribute, $default);
     }
 
     /**
@@ -80,9 +80,9 @@ class Request
     protected function getMCA()
     {
         $path = explode('/', substr($this->path, 1));
-        $this->module = arr_get($path, 0, 'Empty');
-        $this->controller = arr_get($path, 1, 'Empty');
-        $this->action = arr_get($path, 2, 'output');
+        $this->module = Helper::arr_get($path, 0, 'Empty');
+        $this->controller = Helper::arr_get($path, 1, 'Empty');
+        $this->action = Helper::arr_get($path, 2, 'output');
     }
 
     /**
@@ -101,5 +101,20 @@ class Request
         return [
             
         ];
+    }
+
+    /**
+     * 路由
+     */
+    public function route($module = '', $controller = '', $action = '', $params = [])
+    {
+        $module = $module ? $module : $this->module;
+        $controller = $controller ? $controller : $this->controller;
+        $action = $action ? $action : $this->action;
+        
+        call_user_func_array([
+            '\\app\\'. $module .'\\controller\\'. $controller,
+            $action
+        ], $params);
     }
 }

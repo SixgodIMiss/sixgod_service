@@ -2,10 +2,10 @@
 
 namespace app\api\controller;
 
-class Index
+class Order
 {
     public function index()
     {
-        echo 'index';
+        echo 'order';
     }
 }
