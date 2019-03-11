@@ -15,6 +15,7 @@ require_once __DIR__ .'/ErrorException.php';
 require_once __DIR__ .'/Config.php';
 require_once __DIR__ .'/Helper.php';
 require_once __DIR__ .'/Request.php';
+require_once __DIR__ .'/Response.php';
 
 /**
  * app loader
@@ -35,7 +36,7 @@ class Loader
         self::vendor();
 
         // 注册控制器
-        self::register(Helper::my_scandir(API_PATH));
+        self::register(my_scandir(API_PATH));
 
         // 路由
         $request = new Request();
@@ -44,7 +45,7 @@ class Loader
 
     /**
      * 加载文件
-     * @param $files array() 文件数组
+     * @param array $files 文件数组
      */
     protected static function register($files)
     {
