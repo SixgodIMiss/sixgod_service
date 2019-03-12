@@ -15,7 +15,6 @@ class Controller
         'data' => []
     ];
 
-    
     protected function __construct()
     {
         $this->request = new Request();

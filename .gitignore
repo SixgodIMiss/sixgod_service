@@ -1,2 +1,7 @@
 
 vendor/*
+
+wow/download/*
+wow/log/access/*
+wow/runtime/*
+wow/upload/*

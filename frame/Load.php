@@ -16,6 +16,7 @@ require_once __DIR__ .'/Helper.php';
 require_once __DIR__ .'/Request.php';
 require_once __DIR__ .'/Response.php';
 require_once __DIR__ .'/ErrorException.php';
+require_once __DIR__ .'/log.php';
 
 /**
  * app loader
