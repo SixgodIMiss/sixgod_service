@@ -10,9 +10,10 @@ class Index extends Controller
     }
     public function index()
     {
-        $this->result = [
+        $this->response['data'] = [
             'index' => '中国'
         ];
+        $this->success();
         $this->jsonReturn();
     }
 }

@@ -11,11 +11,11 @@
 
 namespace frame;
 
-require_once __DIR__ .'/ErrorException.php';
 require_once __DIR__ .'/Config.php';
 require_once __DIR__ .'/Helper.php';
 require_once __DIR__ .'/Request.php';
 require_once __DIR__ .'/Response.php';
+require_once __DIR__ .'/ErrorException.php';
 
 /**
  * app loader
@@ -54,7 +54,7 @@ class Loader
                 self::register($f);
             }
         } else {
-            require_once $files;
+            include_once $files;
         }
     }
 
@@ -74,7 +74,7 @@ class Loader
      */
     protected static function vendor()
     {
-        require_once VENDOR_PATH . '/autoload.php';
+        include VENDOR_PATH . '/autoload.php';
     }
 }
 
