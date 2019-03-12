@@ -12,8 +12,14 @@ class Response
      *      ···
      * ]
      */
-    public static function response($data = [], $code = 200, $header = [])
+    public static function response(
+        $data = [],
+        $code = 200,
+        $header = [
+            'Content-type' => 'application/json; charset=UTF-8'
+        ])
     {
+        
         $default = [
             'code' => 500,
             'message' => 'Server Exception',

@@ -3,6 +3,10 @@
 namespace frame;
 
 /**
+ * 
+ */
+
+/**
  * 遍历文件夹
  * @param string $path 绝对路径
  */
@@ -32,4 +36,13 @@ function my_scandir($path)
 function arr_get(array $arr, $key, $default = '')
 {
     return isset($arr[$key]) && $arr[$key] ? $arr[$key] : $default;
+}
+
+/**
+ * 转换xml
+ * @param string $to ['decode' || 'encode']
+ */
+function xml_transform($data, $to = 'decode')
+{
+
 }
