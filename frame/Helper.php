@@ -4,7 +4,7 @@ namespace frame;
 
 /**
  * 遍历文件夹
- * @param $path 绝对路径
+ * @param string $path 绝对路径
  * @return array
  */
 function my_scandir($path) 
