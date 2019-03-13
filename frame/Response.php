@@ -11,6 +11,7 @@ class Response
      *      'content-type' => 'application/json | text/html',
      *      ···
      * ]
+     * @return string|mixed
      */
     public static function response(
         $data = [],

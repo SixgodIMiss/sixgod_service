@@ -35,7 +35,7 @@ class Request
         $this->client_ip = $this->get_client_ip();
         $this->schema = $_SERVER['REQUEST_SCHEME'];
         $this->domain = $_SERVER['HTTP_HOST'];
-        $this->pathinfo = $_SERVER['PATH_INFO'];
+        $this->pathinfo = arr_get($_SERVER, 'PATH_INFO', '/');
         $this->path = preg_replace ('/(\..*)/', '', $this->pathinfo);
         $this->url = $this->domain . $this->path;
         $this->getMCA();
@@ -70,6 +70,9 @@ class Request
 
     /**
      * 获取request参数
+     * @param $attribute
+     * @param bool $default
+     * @return mixed|string
      */
     public function get($attribute, $default = false)
     {
@@ -115,6 +118,12 @@ class Request
 
     /**
      * 路由
+     * @param string $module
+     * @param string $controller
+     * @param string $action
+     * @param array $params
+     * @return mixed
+     * @throws \Exception
      */
     public function route($module = '', $controller = '', $action = '', $params = [])
     {

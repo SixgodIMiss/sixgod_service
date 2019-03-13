@@ -11,12 +11,6 @@
 
 namespace frame;
 
-require_once __DIR__ .'/Config.php';
-require_once __DIR__ .'/Helper.php';
-require_once __DIR__ .'/Request.php';
-require_once __DIR__ .'/Response.php';
-require_once __DIR__ .'/ErrorException.php';
-require_once __DIR__ .'/log.php';
 
 /**
  * app loader
@@ -25,44 +19,62 @@ require_once __DIR__ .'/log.php';
  * 工具类
  * 
  */
-
 class Loader
 {
     /**
-     * 启动
+     * @return mixed
+     * @throws \Exception
      */
     public static function run()
     {
-        // 注册vendor
-        self::vendor();
-
-        // 注册控制器
-        self::register(my_scandir(API_PATH));
+        // 加载文件
+        self::load();
 
         // 路由
         $request = new Request();
-        $request->route();
+        return $request->route();
+    }
+
+    protected static function load()
+    {
+        self::loadFrame();
+
+        self::loadVendor();
+
+        self::loadApp();
     }
 
     /**
-     * 加载文件
-     * @param array $files 文件数组
+     * 加载frame
      */
-    protected static function register($files)
+    protected static function loadFrame()
     {
-        if (is_array($files)) {
-            foreach ($files as $f) {
-                self::register($f);
-            }
-        } else {
-            include_once $files;
-        }
+        require_once __DIR__ .'/Helper.php';
+        require_once __DIR__ .'/Config.php';
+
+        load_file(my_scandir(FRAME_PATH));
+    }
+
+    /**
+     * 加载vendor
+     */
+    protected static function loadVendor()
+    {
+        include VENDOR_PATH . '/autoload.php';
+    }
+
+    /**
+     * 加载APP
+     */
+    protected static function loadApp()
+    {
+        load_file(my_scandir(API_PATH));
     }
 
     /**
      * 自动加载类
      */
-    protected static function autoRegister()
+    protected function autoLoad()
     {
         // spl_autoload_register(function($class_name){
         //     require_once PROJECT_PATH .'\\'. $class_name . '.php';
@@ -70,13 +82,6 @@ class Loader
         // });
     }
 
-    /**
-     * 加载vendor
-     */
-    protected static function vendor()
-    {
-        include VENDOR_PATH . '/autoload.php';
-    }
 }
 
 Loader::run();
