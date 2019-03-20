@@ -18,8 +18,8 @@ class Response
         $code = 200,
         $header = [
             'Content-type' => 'application/json; charset=UTF-8'
-        ])
-    {
+        ]
+    ) {
         
         $default = [
             'code' => 500,
