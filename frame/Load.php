@@ -12,12 +12,13 @@
 namespace frame;
 
 
+use frame\core\Request;
+
+
 /**
- * app loader
- * 
- * 控制器
- * 工具类
- * 
+ * 加载类
+ * Class Loader
+ * @package frame
  */
 class Loader
 {
@@ -49,10 +50,17 @@ class Loader
      */
     protected static function loadFrame()
     {
-        require_once __DIR__ .'/Helper.php';
-        require_once __DIR__ .'/Config.php';
+        require_once __DIR__ . '/core/Helper.php';
+        require_once __DIR__ . '/core/Config.php';
 
-        load_file(my_scandir(FRAME_PATH));
+        // 加载核心
+        load_file(my_scandir(FRAME_CORE_PATH));
+
+        // DB
+        load_file(my_scandir(FRAME_DB_PATH));
+
+        // 扩展
+        load_file(my_scandir(FRAME_EXTEND_PATH));
     }
 
     /**

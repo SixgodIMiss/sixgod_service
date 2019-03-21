@@ -1,6 +1,6 @@
 <?php
 
-namespace frame;
+//namespace frame\core\helper;
 
 /**
  * 遍历文件夹

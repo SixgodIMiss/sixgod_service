@@ -7,6 +7,9 @@ namespace app\api\controller;
 
 
 use frame\db\My_Elasticsearch;
+use frame\db\cache\My_Memcached;
+use frame\db\My_Mysqli;
+
 
 /**
  * Class My_Empty
@@ -24,10 +27,8 @@ class My_Empty extends Controller
      */
     public function output()
     {
-        $es = My_Elasticsearch::getInstance('customer');
-        var_dump($es->insert([
-            'name' => 'J'
-        ]));exit;
+        $m = My_Memcached::getInstance();
+
 
         $this->response['code'] = 404;
         $this->response['message'] = '乖，想撬锁？没门儿！';

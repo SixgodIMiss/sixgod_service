@@ -1,6 +1,6 @@
 <?php
 
-namespace frame;
+namespace frame\core;
 
 
 class My_Config
@@ -19,9 +19,15 @@ class My_Config
     private static function define()
     {
         // 项目路径
-        defined('PROJECT_PATH') OR define('PROJECT_PATH', str_replace('\\', '/', dirname(__DIR__)));
+        defined('PROJECT_PATH') OR define('PROJECT_PATH', str_replace('\\', '/', dirname(__DIR__, 2)));
         // 框架
-        defined('FRAME_PATH')   OR define('FRAME_PATH', __DIR__);
+        defined('FRAME_PATH')   OR define('FRAME_PATH', PROJECT_PATH .'/frame');
+        // 框架核心
+        defined('FRAME_CORE_PATH')   OR define('FRAME_CORE_PATH', FRAME_PATH .'/core');
+        // 框架DB
+        defined('FRAME_DB_PATH')   OR define('FRAME_DB_PATH', FRAME_PATH .'/db');
+        // 框架扩展
+        defined('FRAME_EXTEND_PATH')   OR define('FRAME_EXTEND_PATH', FRAME_PATH .'/extend');
         // 项目配置
         defined('CONFIG_PATH')  OR define('CONFIG_PATH', PROJECT_PATH .'/config');
         // vendor
@@ -55,7 +61,7 @@ class My_Config
             if ($config) {
                 $config = arr_get($config, $v, false);
             } else {
-                throw new \Exception('参数查找');
+                throw new \Exception('配置参数查找失败');
             }
         }
 

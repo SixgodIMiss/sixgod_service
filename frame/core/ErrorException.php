@@ -1,6 +1,6 @@
 <?php
 
-namespace frame;
+namespace frame\core;
 
 class ErrorExceptionHandler
 {
@@ -16,8 +16,11 @@ class ErrorExceptionHandler
     /**
      * 错误
      * @param int $severity E_ERROR | E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR | E_USER_ERROR ···
+     * @param string $errstr
+     * @param string $errfile
+     * @param int $errline
      */
-    public static function handleError($severity, $errstr, $errfile = '', $errline = 0)
+    public static function handleError($severity = E_ERROR, $errstr = '', $errfile = '', $errline = 0)
     {
         self::$response = [
             'code' => $severity,
@@ -34,11 +37,12 @@ class ErrorExceptionHandler
 
     /**
      * 异常
+     * @param \Throwable|NULL $e
      */
     public static function handleException(\Throwable $e = NULL)
     {
         if (!$e instanceof \Throwable) {
-            $e = new \Throwable($e);
+            $e = new \Exception($e);
         }
         self::$response = [
             'code' => $e->getCode(),

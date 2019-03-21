@@ -2,8 +2,8 @@
 
 namespace app\api\controller;
 
-use frame\Response;
-use frame\Request;
+use frame\core\Response;
+use frame\core\Request;
 
 
 class Controller
@@ -23,7 +23,7 @@ class Controller
     }
 
     /**
-     * 安检 反爬 ···
+     * 反爬 加解密 过滤···
      */
     protected function securityAccess()
     {
@@ -35,6 +35,7 @@ class Controller
      */
     protected function receive()
     {
+
     }
 
     public function success()
@@ -51,5 +52,15 @@ class Controller
         if (function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
         }
+
+        $this->end();
+    }
+
+    /**
+     * 一般用作写日志
+     */
+    protected function end()
+    {
+
     }
 }

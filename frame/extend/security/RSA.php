@@ -3,7 +3,7 @@
  * 按道理讲是用A的公钥加密 A的私钥解密的
  */
 
-namespace frame\extend;
+namespace frame\extend\security;
 
 
 class My_RSA
@@ -41,9 +41,11 @@ class My_RSA
 
     /**
      * 对称加解密
-     * @param string 原文 || 密文
-     * @param string 密钥
-     * @param string 加密方法 （openssl_get_cipher_methods()）
+     * @param string 加密或解密 en | de
+     * @param string $data 原文 || 密文
+     * @param string $key 密钥
+     * @param string $method 加密方法 （openssl_get_cipher_methods()）
+     * @return string
      */
     public function crypt($to = 'en', $data = '', $key = '', $method = '')
     {
@@ -56,7 +58,8 @@ class My_RSA
     /**
      * 公钥加密
      * @param string $origin_text 原文
-     * @param string 
+     * @param string
+     * @return string
      */
     public function publicEncrypt($origin_text = '')
     {

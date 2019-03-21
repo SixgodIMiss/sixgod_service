@@ -8,10 +8,11 @@
 
 namespace frame\db;
 
+if (class_exists('Elasticsearch\ClientBuilder'))
+    throw new \Exception('Elasticsearch not found');
+
 use Elasticsearch\ClientBuilder;
-use function frame\arr_get;
-use frame\My_Config;
-use mysql_xdevapi\Exception;
+use frame\core\My_Config;
 
 /**
  * Class My_Elasticsearch
@@ -29,7 +30,6 @@ class My_Elasticsearch
 //        'verbose' => true,                 // 返回出数据外的详细输出
     ];
     private $client;   // 客户端
-    private $index;    // 索引
     private $params = [];   // 查询参数
     private $result = [];   // 查询结果
 
@@ -37,34 +37,30 @@ class My_Elasticsearch
 
     /**
      * My_Elasticsearch constructor.
-     * @param $index
+     * @param $host
      * @throws \Exception
      */
-    private function __construct($index)
+    private function __construct($host)
     {
-        $hosts = My_Config::get('db', 'es');
-        $this->client = ClientBuilder::create()->setHosts($hosts)->build();
+        $this->client = ClientBuilder::create()->setHosts($host)->build();
 
-        $this->host = $hosts;
-        $this->index = $index;
-        $this->params = [
-            'index' => $this->index,
-            'type'  => '_doc'
-        ];
+        $this->host = $host;
     }
 
     /**
-     * @param string $index
-     * @return self
+     * @param string $host
+     * @return mixed
      * @throws \Exception
      */
-    public static function getInstance($index = 'customer')
+    public static function getInstance($host = 'default')
     {
-        if (! arr_get(self::$_instance, $index, false) instanceof self) {
-            self::$_instance[$index] = new self($index);
+        if (! arr_get(self::$_instance, $host, false) instanceof self) {
+            $config = My_Config::get('db', 'es', $host);
+
+            self::$_instance[$host] = new self($config);
         }
 
-        return self::$_instance[$index];
+        return self::$_instance[$host];
     }
 
     /**
@@ -74,10 +70,11 @@ class My_Elasticsearch
      */
     public function search($params)
     {
-        if (is_array($params)) {
-            $search = $this->searchMulti($params);
+        $this->params = $params;
+        if (array_keys($params, 'id')) {
+            $search = $this->searchMulti();
         } elseif (!empty($params)) {
-            $search = $this->searchId($params);
+            $search = $this->searchId();
         } else {
             $search = [];
         }
@@ -87,26 +84,20 @@ class My_Elasticsearch
 
     /**
      * 根据 ID 查数据
-     * @param string $id
      * @return array
      */
-    protected function searchId($id = '')
+    protected function searchId()
     {
-        $params = $this->params;
-        $params['id'] = $id;
-        return $this->client->get($params);
+        return $this->client->get($this->params);
     }
 
     /**
      * 根据查询条件查
-     * @param array $condition
      * @return array
      */
-    protected function searchMulti($condition = [])
+    protected function searchMulti()
     {
-        $params = $this->params;
-        $params['body'] = $condition;
-        return $this->client->search($params);
+        return $this->client->search($this->params);
     }
 
     /**

@@ -2,8 +2,11 @@
 
 namespace frame\db;
 
-use function frame\arr_get;
-use frame\My_Config;
+
+use frame\core\My_Config;
+
+if (!extension_loaded('mysqli') || !class_exists('mysqli'))
+    throw new \Exception('mysqli not found');
 
 class My_Mysqli extends \Mysqli
 {
@@ -26,7 +29,8 @@ class My_Mysqli extends \Mysqli
     {
         if (! arr_get(self::$_instance, $db, false) instanceof self)
         {
-            $config = My_Config::get('db', $db);
+            $config = My_Config::get('db', 'mysql', $db);
+
             self::$_instance[$db] = new self($config['host'], $config['username'], $config['password'], $config['dbname'], $config['port'], null);
         }
         return self::$_instance[$db];
