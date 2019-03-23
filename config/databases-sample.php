@@ -9,7 +9,7 @@ return [
             'host' => '127.0.0.1',
             'username' => '',
             'password' => '',
-            'port' => '3306',
+            'port' => 3306,
             'dbname'   => ''
         ],
         'second' => []
@@ -21,8 +21,16 @@ return [
 
     'memcached' => [
         'default' => [
-            [ 'host' => '', 'port' => '' ],
+            [ 'host' => '', 'port' => 11211 ],
             [ 'host' => '', 'port' => '' ]
+        ]
+    ],
+
+    'redis' => [
+        'default' => [
+            'host' => '',
+            'port' => 6379,
+            'auth' => ''
         ]
     ]
 ];

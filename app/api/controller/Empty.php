@@ -6,6 +6,7 @@
 namespace app\api\controller;
 
 
+use frame\db\cache\My_Redis;
 use frame\db\My_Elasticsearch;
 use frame\db\cache\My_Memcached;
 use frame\db\My_Mysqli;
@@ -27,7 +28,7 @@ class My_Empty extends Controller
      */
     public function output()
     {
-        $m = My_Memcached::getInstance();
+        $m = My_Redis::getInstance();
 
 
         $this->response['code'] = 404;
