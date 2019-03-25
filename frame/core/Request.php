@@ -53,7 +53,7 @@ class Request
              'client_ip' => $this->client_ip,
              'schema' => $this->schema,
              'domain' => $this->domain,
-             'pathinfo' => $this->pathinfo,
+             'pathInfo' => $this->pathInfo,
              'path' => $this->path,
              'url' => $this->url,
              'module' => $this->module,
