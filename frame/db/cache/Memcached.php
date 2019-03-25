@@ -55,6 +55,7 @@ class My_Memcached
     {
         if (! arr_get(self::$_instance, $cache, false) instanceof self) {
             $config = My_Config::get('db', 'memcached', $cache);
+            if (empty(arr_get($config, 'host', ''))) throw new \Exception('Memcached no host');
 
             self::$_instance[$cache] = new self($config);
         }
