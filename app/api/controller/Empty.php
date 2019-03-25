@@ -28,7 +28,7 @@ class My_Empty extends Controller
      */
     public function output()
     {
-        $m = My_Redis::getInstance();
+//        $m = My_Redis::getInstance();
 
 
         $this->response['code'] = 404;

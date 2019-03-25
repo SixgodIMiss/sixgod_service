@@ -4,7 +4,7 @@ namespace frame\core;
 
 class Request
 {
-    protected $request;
+    public $request;
     protected $method;
     protected $url;
     protected $client_ip;
@@ -47,25 +47,23 @@ class Request
         // $this->session = $_SESSION; // session_start()
         // $this->cookie = $_COOKIE;
 
-        // $this->request = [
-        //     'method' => $this->method,
-        //     'client_ip' => $this->client_ip,
-        //     'schema' => $this->schema,
-        //     'domain' => $this->domain,
-        //     'pathinfo' => $this->pathinfo,
-        //     'path' => $this->path,
-        //     'url' => $this->url,
-        //     'module' => $this->module,
-        //     'controller' => $this->controller,
-        //     'action' => $this->action,
-        //     'url' => $this->url,
-        //     'params' => $this->params,
-        //     'session' => $this->session,
-        //     'cookie' => $this->cookie,
-        //     'header' => $this->header,
-        //     'cookie' => $this->cookie,
-        //     'file' => $this->file,
-        // ];
+         $this->request = [
+             'method' => $this->method,
+             'client_ip' => $this->client_ip,
+             'schema' => $this->schema,
+             'domain' => $this->domain,
+             'pathinfo' => $this->pathinfo,
+             'path' => $this->path,
+             'url' => $this->url,
+             'module' => $this->module,
+             'controller' => $this->controller,
+             'action' => $this->action,
+             'params' => $this->params,
+//             'session' => $this->session,
+//             'cookie' => $this->cookie,
+             'header' => $this->header,
+             'file' => $this->file,
+         ];
     }
 
     /**

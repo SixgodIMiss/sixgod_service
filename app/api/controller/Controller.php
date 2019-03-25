@@ -9,6 +9,7 @@ use frame\core\Request;
 class Controller
 {
     protected $request;
+    protected $params;
     protected $response = [
         'code' => 500,
         'message' => 'ServerException',
@@ -27,7 +28,8 @@ class Controller
      */
     protected function securityAccess()
     {
-        
+        if (preg_match('/^[a-zA-Z0-9\/]+$/', $this->request->get('pathinfo')))
+            throw new \Exception('非法字符');
     }
 
     /**
@@ -35,6 +37,10 @@ class Controller
      */
     protected function receive()
     {
+        $method = $this->request->get('method');
+
+        $params = $this->request->get('params');
+
 
     }
 
