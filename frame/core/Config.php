@@ -36,6 +36,8 @@ class My_Config
         defined('LOG_PATH')     OR define('LOG_PATH', PROJECT_PATH .'/wow/log');
         // API
         defined('API_PATH')     OR define('API_PATH', PROJECT_PATH .'/app/api');
+        // 线上线下
+        defined('ONLINE')       OR define('ONLINE', 'api.sixgodimiss.com' == $_SERVER['HTTP_HOST'] ? true : false);
     }
 
     /**

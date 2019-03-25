@@ -22,17 +22,10 @@ class ErrorExceptionHandler
      */
     public static function handleError($severity = E_ERROR, $errstr = '', $errfile = '', $errline = 0)
     {
-        self::$response = [
-            'code' => $severity,
-            'message' => $errstr,
-            'data' => [
-                'file' => $errfile,
-                'line' => $errline,
-            ]
-        ];
-        
-        echo Response::response(self::$response);
-        exit(1);
+        self::handleResponse($severity, $errstr, [
+            'file' => $errfile,
+            'line' => $errline,
+        ]);
     }
 
     /**
@@ -44,17 +37,11 @@ class ErrorExceptionHandler
         if (!$e instanceof \Throwable) {
             $e = new \Exception($e);
         }
-        self::$response = [
-            'code' => $e->getCode(),
-            'message' => $e->getMessage(),
-            'data' => [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]
-        ];
 
-        echo Response::response(self::$response);
-        exit(1);
+        self::handleResponse($e->getCode(), $e->getMessage(), [
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
     }
 
     /**
@@ -63,6 +50,24 @@ class ErrorExceptionHandler
     public static function handleShutdown()
     {
         
+    }
+
+    /**
+     * @param $code
+     * @param $message
+     * @param $data
+     */
+    protected static function handleResponse($code, $message, $data)
+    {
+        self::$response = [
+            'code' => $code,
+            'message' => $message
+        ];
+
+        self::$response['data'] = ONLINE ? [] : $data;
+
+        echo Response::response(self::$response);
+        exit(1);
     }
 }
 

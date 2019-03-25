@@ -56,6 +56,7 @@ class My_Elasticsearch
     {
         if (! arr_get(self::$_instance, $host, false) instanceof self) {
             $config = My_Config::get('db', 'es', $host);
+            if (empty($config)) throw new \Exception('Elasticsearch no host');
 
             self::$_instance[$host] = new self($config);
         }

@@ -10,8 +10,9 @@ class Request
     protected $client_ip;
     protected $schema;
     protected $domain;
-    protected $pathinfo;
+    protected $pathInfo;
     protected $path;  // 不含后缀
+    protected $queryString;
     protected $module;
     protected $controller;
     protected $action;
@@ -36,12 +37,12 @@ class Request
         $this->schema = $_SERVER['REQUEST_SCHEME'];
         $this->domain = $_SERVER['HTTP_HOST'];
         $this->pathinfo = arr_get($_SERVER, 'PATH_INFO', '/');
-        $this->path = preg_replace ('/(\..*)/', '', $this->pathinfo);
+        $this->path = preg_replace ('/(\..*)/', '', $this->pathInfo);
         $this->url = $this->domain . $this->path;
         $this->getMCA();
-        $this->params = $this->getParams();
         $this->header = $this->getHeaders();
         $this->file = $_FILES;
+        $this->params = $this->getParams();
 
         // 考虑要不要用
         // $this->session = $_SESSION; // session_start()
@@ -101,17 +102,57 @@ class Request
      */
     protected function getParams()
     {
-        return file_get_contents('php://input');
+        switch ($this->method)
+        {
+            case 'GET':
+                $this->queryString = $_SERVER['QUERY_STRING'];
+                $params = $_GET;
+                break;
+            case 'POST':
+                // 这个地方有点怪 就是 CONTENT_TYPE => multipart/form-data; boundary=--------------------------980089571099425908981742
+//                if ('multipart/form-data' == $this->header['content-type'] || 'application/x-www-form-urlencoded' == $this->header['content-type']) {
+                if ('application/x-www-form-urlencoded' == $this->header['content-type'] ||
+                    preg_match('/multipart\/form-data/', $this->header['content-type'])) {
+
+                    $params = $_POST;
+
+                } else {
+                    $params = json_decode(file_get_contents('php://input'), true);
+                }
+
+                break;
+            default:
+                throw new \Exception('老铁，没问题', 200);
+        }
+
+        return $params;
     }
 
     /**
      * HTTP头属性
+     * copy TP5
      */
     protected function getHeaders()
     {
-        return [
-            
-        ];
+        $header = [];
+        if (function_exists('apache_request_headers') && $result = apache_request_headers()) {
+            $header = $result;
+        } else {
+            $server = $_SERVER;
+            foreach ($server as $key => $val) {
+                if (0 === strpos($key, 'HTTP_')) {
+                    $key          = str_replace('_', '-', strtolower(substr($key, 5)));
+                    $header[$key] = $val;
+                }
+            }
+            if (isset($server['CONTENT_TYPE'])) {
+                $header['content-type'] = $server['CONTENT_TYPE'];
+            }
+            if (isset($server['CONTENT_LENGTH'])) {
+                $header['content-length'] = $server['CONTENT_LENGTH'];
+            }
+        }
+        return array_change_key_case($header);
     }
 
     /**

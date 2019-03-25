@@ -40,6 +40,7 @@ class My_Oss
     {
         if (! arr_get(self::$_instance, $oss, null) instanceof self) {
             $config = My_Config::get($oss, 'oss');
+            if (empty(arr_get($config, 'endpoint', ''))) throw new \Exception('Oss no endpoint');
 
             self::$_instance[$oss] = new self($config);
         }

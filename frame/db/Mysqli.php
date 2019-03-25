@@ -30,6 +30,7 @@ class My_Mysqli extends \Mysqli
         if (! arr_get(self::$_instance, $db, false) instanceof self)
         {
             $config = My_Config::get('db', 'mysql', $db);
+            if (empty(arr_get($config, 'host', ''))) throw new \Exception('Mysql no host');
 
             self::$_instance[$db] = new self($config['host'], $config['username'], $config['password'], $config['dbname'], $config['port'], null);
         }

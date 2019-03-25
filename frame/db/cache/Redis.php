@@ -41,6 +41,8 @@ class My_Redis
     {
         if (! arr_get(self::$_instance, $db, null) instanceof self) {
             $config = My_Config::get('db', 'redis', $db);
+            if (empty(arr_get($config, 'host', ''))) throw new \Exception('Redis no host');
+
             self::$_instance[$db] = new self($config);
         }
 
