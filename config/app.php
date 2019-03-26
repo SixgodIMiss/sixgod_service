@@ -6,4 +6,8 @@
  * Time: 10:42
  */
 
-return [];
+return [
+    'route' => [
+        'reg' => '[^a-zA-Z0-9=&_]'
+    ]
+];

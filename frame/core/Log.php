@@ -9,7 +9,7 @@ class Log
         'ip' => '',
         'url' => '', // url+method
         'params' => '', // 传参
-        'return' => ''
+        'response' => ''
     ];
     private static $access_path = '';
 
@@ -20,7 +20,7 @@ class Log
      */
     public static function setAccessLog($key, $value = '')
     {
-        self::$access_path = self::$access_path ? self::$access_path : LOG_PATH . '/access/' . date('Y-m') . '/' . date('d') . '.txt';
+        self::$access_path = self::$access_path ? self::$access_path : LOG_PATH . '/access/' . date('Y-m') . '/' . date('d') . '.log';
         self::$access_log[$key] = $value;
     }
 
@@ -35,7 +35,7 @@ class Log
         $result .= 'IP: ' . self::$access_log['ip'] . PHP_EOL;
         $result .= 'Url: ' . self::$access_log['url'] . PHP_EOL;
         $result .= 'Params: ' . json_encode(self::$access_log['params'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
-        $result .= 'Return: ' . json_encode(self::$access_log['return'], JSON_UNESCAPED_UNICODE);
+        $result .= 'Response: ' . json_encode(self::$access_log['response'], JSON_UNESCAPED_UNICODE);
         $result .= PHP_EOL . PHP_EOL;
         return $result;
     }
@@ -45,7 +45,7 @@ class Log
      */
     public static function storeAccessLog()
     {
-        if (file_exists(dirname(self::$access_path))) {
+        if (!file_exists(dirname(self::$access_path))) {
             mkdir (dirname(self::$access_path), 0755, true);
         }
 

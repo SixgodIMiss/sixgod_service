@@ -2,6 +2,8 @@
 
 namespace app\api\controller;
 
+use frame\core\Log;
+use frame\core\My_Config;
 use frame\core\Response;
 use frame\core\Request;
 
@@ -28,7 +30,7 @@ class Controller
      */
     protected function securityAccess()
     {
-        if (preg_match('/^[a-zA-Z0-9\/]+$/', $this->request->get('pathinfo')))
+        if (preg_match('/'. My_Config::get('app', 'route', 'reg') .'/', $this->request->get('queryString')))
             throw new \Exception('非法字符');
     }
 
@@ -37,11 +39,11 @@ class Controller
      */
     protected function receive()
     {
-        $method = $this->request->get('method');
-
-        $params = $this->request->get('params');
-
-
+        // 设置日志
+        Log::setAccessLog('date', date('Y-m-d_H:i:s'));
+        Log::setAccessLog('ip', $this->request->get('clientIp'));
+        Log::setAccessLog('url', $this->request->get('domain') . $this->request->get('uri') .' '. $this->request->get('method'));
+        Log::setAccessLog('params', $this->request->get('params'));
     }
 
     public function success()
@@ -50,6 +52,9 @@ class Controller
         $this->response['message'] = 'Success';
     }
 
+    /**
+     * 返回 json 数据
+     */
     public function jsonReturn()
     {
         echo Response::response($this->response);
@@ -67,6 +72,8 @@ class Controller
      */
     protected function end()
     {
-
+        // 存储日志
+        Log::setAccessLog('response', $this->response);
+        Log::storeAccessLog();
     }
 }

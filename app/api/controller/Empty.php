@@ -33,6 +33,7 @@ class My_Empty extends Controller
 
         $this->response['code'] = 404;
         $this->response['message'] = '乖，想撬锁？没门儿！';
+        $this->response['data'] = $this->request->get('params');
 
         $this->jsonReturn();
     }

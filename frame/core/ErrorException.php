@@ -67,6 +67,21 @@ class ErrorExceptionHandler
         self::$response['data'] = ONLINE ? [] : $data;
 
         echo Response::response(self::$response);
+
+        // 提高页面响应
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+
+        // 写日志
+        $request = new Request();
+        Log::setAccessLog('date', date('Y-m-d_H:i:s'));
+        Log::setAccessLog('ip', $request->get('clientIp'));
+        Log::setAccessLog('url', $request->get('domain') . $request->get('uri') .' '. $request->get('method'));
+        Log::setAccessLog('params', $request->get('params'));
+        Log::setAccessLog('response', self::$response);
+        Log::storeAccessLog();
+
         exit(1);
     }
 }

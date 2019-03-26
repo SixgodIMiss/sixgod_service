@@ -7,7 +7,8 @@ class Request
     public $request;
     protected $method;
     protected $url;
-    protected $client_ip;
+    protected $uri;
+    protected $clientIp;
     protected $schema;
     protected $domain;
     protected $pathInfo;
@@ -33,12 +34,14 @@ class Request
     protected function init()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->client_ip = $this->get_client_ip();
+        $this->clientIp = $this->get_client_ip();
         $this->schema = $_SERVER['REQUEST_SCHEME'];
         $this->domain = $_SERVER['HTTP_HOST'];
-        $this->pathinfo = arr_get($_SERVER, 'PATH_INFO', '/');
+        $this->pathInfo = arr_get($_SERVER, 'PATH_INFO', '/');
         $this->path = preg_replace ('/(\..*)/', '', $this->pathInfo);
+        $this->queryString = $_SERVER['QUERY_STRING'];
         $this->url = $this->domain . $this->path;
+        $this->uri = $_SERVER['REQUEST_URI'];
         $this->getMCA();
         $this->header = $this->getHeaders();
         $this->file = $_FILES;
@@ -50,12 +53,14 @@ class Request
 
          $this->request = [
              'method' => $this->method,
-             'client_ip' => $this->client_ip,
+             'clientIp' => $this->clientIp,
              'schema' => $this->schema,
              'domain' => $this->domain,
              'pathInfo' => $this->pathInfo,
              'path' => $this->path,
              'url' => $this->url,
+             'queryString' => $this->queryString,
+             'uri' => $this->uri,
              'module' => $this->module,
              'controller' => $this->controller,
              'action' => $this->action,
@@ -105,12 +110,12 @@ class Request
         switch ($this->method)
         {
             case 'GET':
-                $this->queryString = $_SERVER['QUERY_STRING'];
                 $params = $_GET;
                 break;
             case 'POST':
                 // 这个地方有点怪 就是 CONTENT_TYPE => multipart/form-data; boundary=--------------------------980089571099425908981742
-//                if ('multipart/form-data' == $this->header['content-type'] || 'application/x-www-form-urlencoded' == $this->header['content-type']) {
+                // if ('multipart/form-data' == $this->header['content-type'] || 'application/x-www-form-urlencoded' == $this->header['content-type']) {
+
                 if ('application/x-www-form-urlencoded' == $this->header['content-type'] ||
                     preg_match('/multipart\/form-data/', $this->header['content-type'])) {
 
