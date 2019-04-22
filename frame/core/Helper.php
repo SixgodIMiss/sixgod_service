@@ -70,3 +70,20 @@ function load_file($file, $type = 'require_once')
         }
     }
 }
+
+/**
+ * 替换 range 函数，无限流循环
+ * foreach (xrange(1, 1000000) as $num) {
+ *  echo $num, "\n";
+ * }
+ * @param int $start
+ * @param int $numbers
+ * @param int $step
+ * @return Generator
+ */
+function xrange($start = 0, $numbers = 0, $step = 1)
+{
+    for ($i = $start; $i <= $numbers; $i += $step) {
+        yield $i;
+    }
+}
